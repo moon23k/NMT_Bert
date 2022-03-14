@@ -23,9 +23,10 @@ def load_model(model_name, config):
         model = Transformer(config)
         model.apply(init_xavier)
     
-    else:
+    elif model_name == 'bert_nmt':
         model = BertNMT(config)
-        model.apply(init_xavier)
+        model.encoder.apply(init_xavier)
+        model.decoder.apply(init_xavier)
     
 
     model.to(config.device)

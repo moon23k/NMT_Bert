@@ -156,7 +156,7 @@ if __name__ == '__main__':
     parser.add_argument('-scheduler', required=False)
     args = parser.parse_args()
     
-    assert args.model in ['transformer', 'bert']
+    assert args.model in ['transformer', 'bert_nmt']
     assert args.data in ['wmt', 'iwslt', 'multi30k']
     assert args.scheduler in ["None", 'cosine_annealing_warm', 'cosine_annealing', 'exponential', 'step']
     
