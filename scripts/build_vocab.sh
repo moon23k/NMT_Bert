@@ -1,10 +1,10 @@
 #!/bin/bash
 
-while getopts i:p:t: flag; do
+while getopts i:p:c: flag; do
     case "${flag}" in
         i) input=${OPTARG};;
         p) prefix=${OPTARG};;
-        t) type=${OPTARG};;
+        c) config=${OPTARG};;
     esac
 done
 
@@ -26,7 +26,7 @@ function parse_yaml {
    }'
 }
 
-eval $(parse_yaml ../configs/vocab.yaml)
+eval $(parse_yaml ../configs/$config.yaml)
 
 
 spm_train --input=$input --model_prefix=$prefix \
