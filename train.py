@@ -33,16 +33,7 @@ class Config(object):
 
         self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
         self.best_valid_loss = float('inf')
-        
-        #initial lr differs according to lr_scheduler
-        if args.scheduler == "None":
-            self.learning_rate = 5e-4
-        elif args.scheduler == 'cosine_annealing_warm':
-            self.learning_rate = 1e-9
-        elif args.scheduler == 'cosine_annealing':
-            self.learning_rate = 1e-4
-        else:
-            self.learning_rate = 2e-3
+        self.learning_rate = 5e-4
 
     def print_attr(self):
         for attribute, value in self.__dict__.items():
@@ -57,13 +48,9 @@ def run(args, config):
     chk_dir = f"checkpoints/{args.model}/{args.data}/"
     os.makedirs(chk_dir, exist_ok=True)
     
-    
-    if args.scheduler != "None":
-        chk_file = f"train_states_{args.scheduler}.pt"
-        record_file = f"train_record_{args.scheduler}.json"
-    else:
-        chk_file = "train_states.pt"
-        record_file = 'train_record.json'
+    chk_file = "train_states.pt"
+    record_file = "train_record.json"
+
     
     chk_path = os.path.join(chk_dir, chk_file)
     record_path = os.path.join(chk_dir, record_file)
@@ -81,12 +68,6 @@ def run(args, config):
     model = load_model(args.model, config)
     criterion = nn.CrossEntropyLoss(ignore_index=config.pad_idx).to(config.device)
     optimizer = optim.Adam(model.parameters(), lr=config.learning_rate)
-	
-
-    if args.scheduler != "None":
-        scheduler = get_scheduler(args.scheduler, optimizer)
-    else:
-        scheduler = None
     
 
     record_time = time.time()
@@ -96,16 +77,11 @@ def run(args, config):
 
         train_loss = train_epoch(model, train_dataloader, criterion, optimizer, config.clip, config.device)
         valid_loss = valid_epoch(model, valid_dataloader, criterion, config.device)
-
         
 
         end_time = time.time()
         epoch_mins, epoch_secs = epoch_time(start_time, end_time)
 
-
-        if scheduler is not None:
-            scheduler.step()
-        
 
         #save training records
         train_record['epoch'].append(epoch+1)
@@ -119,7 +95,6 @@ def run(args, config):
             config.best_valid_loss = valid_loss
             torch.save({'epoch': epoch + 1,
                         'model_state_dict': model.state_dict(),
-                        'optimizer_state_dict': optimizer.state_dict(),
                         'train_loss': train_loss,
                         'valid_loss': valid_loss}, chk_path)
 
@@ -153,12 +128,10 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-model', required=True)
     parser.add_argument('-data', required=True)
-    parser.add_argument('-scheduler', required=False)
     args = parser.parse_args()
     
-    assert args.model in ['transformer', 'bert_nmt']
+    assert args.model in ['transformer', 'bert_base', 'bert_large', 'distil_bert', 'albert', 'roberta']
     assert args.data in ['wmt', 'iwslt', 'multi30k']
-    assert args.scheduler in ["None", 'cosine_annealing_warm', 'cosine_annealing', 'exponential', 'step']
     
     config = Config(args)
     
