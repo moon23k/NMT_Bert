@@ -4,7 +4,6 @@ cd data
 
 datasets=(multi30k iwslt wmt)
 splits=(train valid test)
-tokenizer=bpe
 langs=(en de)
 
 
@@ -48,23 +47,37 @@ sudo ldconfig
 cd ../../
 
 
+vocabs=(vocab albert_vocab roberta_vocab)
 
 for dataset in "${datasets[@]}"; do
-    bash ../scripts/build_vocab.sh -i ${dataset}/concat.txt -p ${dataset}/tokenizer -t bpe
+    mkdir -p ${dataset}/vocab
+    for vocab in "${vocabs[@]}"; do
+        bash ../scripts/build_vocab.sh -i ${dataset}/concat.txt -p ${dataset}/vocab/${vocab} -c ${vocab}
+    done
     rm ${dataset}/concat.txt
 done
 
 
+declare -A ids
+ids[vocab]=ids
+ids[albert_vocab]=ids_albert
+ids[roberta_vocab]=ids_roberta
 
-#tokens to ids | total 54 files
+
+#tokens to ids
 for dataset in "${datasets[@]}"; do
-    mkdir -p ${dataset}/ids
-    for split in "${splits[@]}"; do
-        for lang in "${langs[@]}"; do
-            spm_encode --model=${dataset}/tokenizer.model --extra_options=bos:eos \
-            --output_format=id < ${dataset}/tok/${split}.${lang} > ${dataset}/ids/${split}.${lang}
+    for vocab in "${vocabs[@]}"; do
+        mkdir -p ${dataset}/${ids[${vocab}]}
+        for split in "${splits[@]}"; do
+            for lang in "${langs[@]}"; do
+                spm_encode --model=${dataset}/vocab/${vocab}.model --extra_options=bos:eos \
+                --output_format=id < ${dataset}/tok/${split}.${lang} > ${dataset}/${ids[${vocab}]}/${split}.${lang}
+            done
         done
     done
 done
 
+
+
 rm -r sentencepiece
+

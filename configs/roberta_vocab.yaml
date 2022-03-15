@@ -1,4 +1,4 @@
-vocab_size: 28996
+vocab_size: 50265
 character_coverage: 0.9995
 type: "bpe"
 
