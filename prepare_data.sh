@@ -61,7 +61,6 @@ for dataset in "${datasets[@]}"; do
     mkdir -p ${dataset}/ids
     for split in "${splits[@]}"; do
         for lang in "${langs[@]}"; do
-            mkdir -p ${dataset}/ids
             spm_encode --model=${dataset}/tokenizer.model --extra_options=bos:eos \
             --output_format=id < ${dataset}/tok/${split}.${lang} > ${dataset}/ids/${split}.${lang}
         done
