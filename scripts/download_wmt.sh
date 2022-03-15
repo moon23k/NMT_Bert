@@ -47,7 +47,8 @@ ls | grep ".perl" | xargs rm
 
 
 #use only 1,000 rows for valid and test dataset
-for split in "${splits[@]}"; do
+vt=(valid test)
+for split in "${vt[@]}"; do
     for lang in "${langs]@}"; do
         sed -n '1, 1000p' raw/$split.$lang > raw/tmp_$split.$lang
         rm raw/$split.$lang
