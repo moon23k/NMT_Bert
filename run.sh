@@ -1,4 +1,5 @@
 #!/bin/bash
+python3 -m pip install -U PyYAML
 
 while getopts a:m:d: flag; do
     case "${flag}" in

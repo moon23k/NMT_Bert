@@ -1,12 +1,23 @@
 #!/bin/bash
 
-while getopts i:p:c: flag; do
+while getopts i:p:b: flag; do
     case "${flag}" in
         i) input=${OPTARG};;
         p) prefix=${OPTARG};;
-        c) config=${OPTARG};;
+        b) bert=${OPTARG};;
     esac
 done
+
+
+if [ $bert -eq albert ]
+then $vocab_size=30000
+
+elif [ $bert -eq albert ]
+then $vocab_size=50265 
+
+else
+   $vocab_size=28996   
+fi
 
 
 function parse_yaml {
@@ -30,6 +41,8 @@ eval $(parse_yaml ../configs/$config.yaml)
 
 
 spm_train --input=$input --model_prefix=$prefix \
---vocab_size=$vocab_size --character_coverage=$coverage --model_type=$type \
---unk_id=$unk_id --unk_piece=$unk_piece --pad_id=$pad_id --pad_piece=$pad_piece \
---bos_id=$bos_id --bos_piece=$bos_piece --eos_id=$eos_id --eos_piece=$eos_piece
+--vocab_size=$vocab_size --model_type=$type \
+--unk_id=$unk_id --unk_piece=$unk_piece \
+--pad_id=$pad_id --pad_piece=$pad_piece \
+--bos_id=$bos_id --bos_piece=$bos_piece \
+--eos_id=$eos_id --eos_piece=$eos_piece

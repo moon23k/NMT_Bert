@@ -1,8 +1,8 @@
 import torch
 import torch.nn as nn
 
-from model.transformer.module import Transformer
-from model.bert_nmt.module import BertNMT
+from model.module import BertNMT
+from model.module_ligth import BertNMTLight
 
 
 
@@ -19,12 +19,13 @@ def count_parameters(model):
 
 
 def load_model(model_name, config):
-    if model_name == 'transformer':
-        model = Transformer(config)
-        model.apply(init_xavier)
-    
-    elif model_name == 'bert_nmt':
+    if model_name == 'bert_nmt':
         model = BertNMT(config)
+        model.encoder.apply(init_xavier)
+        model.decoder.apply(init_xavier)
+
+    elif model_name == 'bert_nmt_light':
+        model = BertNMTLight(config)
         model.encoder.apply(init_xavier)
         model.decoder.apply(init_xavier)
     

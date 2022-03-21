@@ -43,8 +43,9 @@ def _collate_fn(data_batch):
         src_batch.append(src)
         trg_batch.append(trg)
 
-    src_batch = pad_sequence(src_batch, batch_first=True, padding_value=1)
-    trg_batch = pad_sequence(trg_batch, batch_first=True, padding_value=1)
+    #padding value == 0
+    src_batch = pad_sequence(src_batch, batch_first=True, padding_value=0)
+    trg_batch = pad_sequence(trg_batch, batch_first=True, padding_value=0)
 
     return src_batch, trg_batch
 

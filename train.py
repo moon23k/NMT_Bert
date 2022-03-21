@@ -127,10 +127,12 @@ def run(args, config):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('-model', required=True)
+    parser.add_argument('-bert', required=True)
     parser.add_argument('-data', required=True)
     args = parser.parse_args()
     
-    assert args.model in ['transformer', 'bert_base', 'bert_large', 'distil_bert', 'albert', 'roberta']
+    assert args.model in ['bert_nmt', 'bert_nmt_light']
+    assert args.bert in ['bert_base', 'bert_large', 'distil_bert', 'albert', 'roberta']
     assert args.data in ['wmt', 'iwslt', 'multi30k']
     
     config = Config(args)

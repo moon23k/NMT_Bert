@@ -1,5 +1,3 @@
-vocab_size: 28996
-character_coverage: 0.9995
 type: "bpe"
 
 pad_id: 0
