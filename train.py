@@ -22,11 +22,13 @@ from utils.scheduler import get_scheduler
 class Config(object):
     def __init__(self, args):
         
-        files = [f"configs/{file}.yaml" for file in [args.model, 'train']]
+        files = ['model', 'train']
 
         for file in files:
             with open(file, 'r') as f:
                 params = yaml.load(f, Loader=yaml.FullLoader)
+                if file == 'model':
+                    params = params[args.model]
 
             for p in params.items():
                 setattr(self, p[0], p[1])
