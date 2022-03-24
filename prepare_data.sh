@@ -2,18 +2,14 @@
 mkdir -p data
 cd data
 
-datasets=(multi30k iwslt wmt)
+datasets=(wmt_sm iwslt_sm multi30k)
 splits=(train valid test)
 langs=(en de)
-
+models=(bert albert roberta)
 
 
 #Download datasets
-for dataset in "${datasets[@]}"; do
-    bash ../scripts/download_${dataset}.sh
-done
-
-
+bash ../scripts/download_sm_datasets.sh
 
 #Peer Tokenize with sacremoses
 python3 -m pip install -U sacremoses
@@ -47,31 +43,25 @@ sudo ldconfig
 cd ../../
 
 
-vocabs=(vocab albert_vocab roberta_vocab)
 
 for dataset in "${datasets[@]}"; do
     mkdir -p ${dataset}/vocab
-    for vocab in "${vocabs[@]}"; do
-        bash ../scripts/build_vocab.sh -i ${dataset}/concat.txt -p ${dataset}/vocab/${vocab} -c ${vocab}
+    for model in "${models[@]}"; do
+        bash ../scripts/build_vocab.sh -i ${dataset}/concat.txt -p ${dataset}/vocab/${model} -m ${model}
     done
     rm ${dataset}/concat.txt
 done
 
 
-declare -A ids
-ids[vocab]=ids
-ids[albert_vocab]=ids_albert
-ids[roberta_vocab]=ids_roberta
-
 
 #tokens to ids
 for dataset in "${datasets[@]}"; do
-    for vocab in "${vocabs[@]}"; do
-        mkdir -p ${dataset}/${ids[${vocab}]}
+    for model in "${models[@]}"; do
+        mkdir -p ${dataset}/ids_${model}
         for split in "${splits[@]}"; do
             for lang in "${langs[@]}"; do
-                spm_encode --model=${dataset}/vocab/${vocab}.model --extra_options=bos:eos \
-                --output_format=id < ${dataset}/tok/${split}.${lang} > ${dataset}/${ids[${vocab}]}/${split}.${lang}
+                spm_encode --model=${dataset}/vocab/${model}.model --extra_options=bos:eos \
+                --output_format=id < ${dataset}/tok/${split}.${lang} > ${dataset}/ids_${model}/${split}.${lang}
             done
         done
     done
