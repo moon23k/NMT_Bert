@@ -53,8 +53,8 @@ distil_bert:
   max_len: 100
 
 
-
-alberta:
+#albert config
+albert:
   input_dim: 30000
   output_dim: 30000
 
@@ -72,7 +72,7 @@ alberta:
 
 
 
-
+#roberta config
 roberta:
   input_dim: 50265
   output_dim: 50265
