@@ -25,7 +25,7 @@ class Config(object):
         files = ['model', 'train']
 
         for file in files:
-            with open(file, 'r') as f:
+            with open(f"configs/{file}.yaml", 'r') as f:
                 params = yaml.load(f, Loader=yaml.FullLoader)
                 if file == 'model':
                     params = params[args.model]

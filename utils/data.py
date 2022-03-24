@@ -4,8 +4,8 @@ from torch.nn.utils.rnn import pad_sequence
 
 
 
-def read_text(d_name, f_name, max_words=100):
-    with open(f'data/{d_name}/ids/{f_name}', 'r', encoding='utf-8') as f:
+def read_text(d_name, bert_model, f_name, max_words=100):
+    with open(f'data/{d_name}/ids_{bert_model}/{f_name}', 'r', encoding='utf-8') as f:
         orig_data = f.readlines()
 
     #cut long sentences with max_words limitation
@@ -51,9 +51,9 @@ def _collate_fn(data_batch):
 
 
 
-def get_dataloader(d_name, split, batch_size):
-    src = read_text(d_name, f"{split}.en")
-    trg = read_text(d_name, f"{split}.de")
+def get_dataloader(d_name, bert_model, split, batch_size):
+    src = read_text(d_name, bert_model, f"{split}.en")
+    trg = read_text(d_name, bert_model, f"{split}.de")
 
     dataset = CustomDataset(src, trg)
     iterator = DataLoader(dataset, batch_size=batch_size, shuffle=True, collate_fn=_collate_fn, num_workers=2)

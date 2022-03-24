@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 
 from model.module import BertNMT
-from model.module_ligth import BertNMTLight
+from model.module_light import BertNMTLight
 
 
 

@@ -1,7 +1,7 @@
 import copy
 import torch
 import torch.nn as nn
-from layer import EncoderLayer, DecoderLayer, get_clones
+from .layer import EncoderLayer, DecoderLayer, get_clones
 from transformers import BertModel
 
 
