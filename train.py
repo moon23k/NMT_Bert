@@ -13,7 +13,6 @@ import torch.optim as optim
 from utils.data import get_dataloader
 from utils.model import load_model
 from utils.train import train_epoch, valid_epoch, epoch_time
-from utils.scheduler import get_scheduler
 
 
 
@@ -28,7 +27,7 @@ class Config(object):
             with open(f"configs/{file}.yaml", 'r') as f:
                 params = yaml.load(f, Loader=yaml.FullLoader)
                 if file == 'model':
-                    params = params[args.model]
+                    params = params[args.bert]
 
             for p in params.items():
                 setattr(self, p[0], p[1])

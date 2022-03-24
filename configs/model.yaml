@@ -1,6 +1,7 @@
 
 #bert-base config
 bert: 
+  pretrained: bert-base-cased
   input_dim: 28996
   output_dim: 28996
 
@@ -19,6 +20,7 @@ bert:
 
 #bert-large config
 bert_large:
+  pretrained: bert-large-cased
   input_dim: 28996
   output_dim: 28996
 
@@ -37,6 +39,7 @@ bert_large:
 
 #distil_bert config
 distil_bert:
+  pretrained: distilbert-base-cased
   input_dim: 28996
   output_dim: 28996
 
@@ -55,6 +58,7 @@ distil_bert:
 
 #albert config
 albert:
+  pretrained: albert-base-v2
   input_dim: 30000
   output_dim: 30000
 
@@ -74,6 +78,7 @@ albert:
 
 #roberta config
 roberta:
+  pretrained: roberta-base
   input_dim: 50265
   output_dim: 50265
 

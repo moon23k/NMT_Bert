@@ -42,7 +42,7 @@ class BertNMT(nn.Module):
     def __init__(self, config):
         super(BertNMT, self).__init__()
 
-        self.bert = BertModel.from_pretrained(config.bert_model)
+        self.bert = BertModel.from_pretrained(config.pretrained)
         self.embedding = self.bert.embeddings
 
         self.encoder = Encoder(config)
