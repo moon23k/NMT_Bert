@@ -1,23 +1,22 @@
 #!/bin/bash
 
-while getopts i:p:b: flag; do
+while getopts i:p:m: flag; do
     case "${flag}" in
         i) input=${OPTARG};;
         p) prefix=${OPTARG};;
-        b) bert=${OPTARG};;
+        m) model=${OPTARG};;
     esac
 done
 
 
-if [ $bert -eq albert ]
-then $vocab_size=30000
+declare -A vocab_size
 
-elif [ $bert -eq albert ]
-then $vocab_size=50265 
+vocab_size[bert]=28996
+vocab_size[albert]=30000
+vocab_size[roberta]=50265
 
-else
-   $vocab_size=28996   
-fi
+vocab_size=${vocab_size[${model}]}
+
 
 
 function parse_yaml {
@@ -37,7 +36,7 @@ function parse_yaml {
    }'
 }
 
-eval $(parse_yaml ../configs/$config.yaml)
+eval $(parse_yaml ../configs/vocab.yaml)
 
 
 spm_train --input=$input --model_prefix=$prefix \
