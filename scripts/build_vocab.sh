@@ -4,19 +4,8 @@ while getopts i:p:m: flag; do
     case "${flag}" in
         i) input=${OPTARG};;
         p) prefix=${OPTARG};;
-        m) model=${OPTARG};;
     esac
 done
-
-
-declare -A vocab_size
-
-vocab_size[bert]=28996
-vocab_size[albert]=30000
-vocab_size[roberta]=50265
-
-vocab_size=${vocab_size[${model}]}
-
 
 
 function parse_yaml {

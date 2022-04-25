@@ -52,6 +52,9 @@ def _collate_fn(data_batch):
 
 
 def get_dataloader(bert_model, split, batch_size):
+    if bert_model in ['bert_base', 'bert_large', 'distil_bert']:
+        bert_model = 'bert'
+        
     src = read_text(bert_model, f"{split}.en")
     trg = read_text(bert_model, f"{split}.de")
 

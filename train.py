@@ -36,6 +36,8 @@ class Config(object):
         self.best_valid_loss = float('inf')
         self.learning_rate = 5e-4
 
+        #self.pretrained
+
     def print_attr(self):
         for attribute, value in self.__dict__.items():
             print(attribute, ': ', value)
@@ -46,11 +48,11 @@ class Config(object):
 
 def run(args, config):
     #set checkpoint, record path
-    chk_dir = f"checkpoints/{args.model}/{args.data}/"
+    chk_dir = f"checkpoints/{args.bert}/"
     os.makedirs(chk_dir, exist_ok=True)
     
-    chk_file = "train_states.pt"
-    record_file = "train_record.json"
+    chk_file = f"{args.bert}_states.pt"
+    record_file = f"{args.bert}_record.json"
 
     
     chk_path = os.path.join(chk_dir, chk_file)
@@ -61,8 +63,8 @@ def run(args, config):
     train_record = defaultdict(list)
         
     #get dataloader from chosen dataset
-    train_dataloader = get_dataloader(args.data, 'train', config.batch_size)
-    valid_dataloader = get_dataloader(args.data, 'valid', config.batch_size)
+    train_dataloader = get_dataloader(args.bert, 'train', config.batch_size)
+    valid_dataloader = get_dataloader(args.bert, 'valid', config.batch_size)
     
     
     #load model, criterion, optimizer, scheduler
@@ -127,15 +129,10 @@ def run(args, config):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('-model', required=True)
     parser.add_argument('-bert', required=True)
-    parser.add_argument('-data', required=True)
     args = parser.parse_args()
     
-    assert args.model in ['bert_nmt', 'bert_nmt_light']
-    assert args.bert in ['bert_base', 'bert_large', 'distil_bert', 'albert', 'roberta']
-    assert args.data in ['wmt', 'iwslt', 'multi30k']
+    assert args.bert in ['bert', 'distil_bert', 'albert', 'roberta']
     
     config = Config(args)
-    
     run(args, config)

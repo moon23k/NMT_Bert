@@ -2,14 +2,14 @@ import torch
 import torch.nn as nn
 
 from model.module import BertNMT
-from model.module_light import BertNMTLight
 
 
 
-
+#init params with xavier without pretrained bert params
 def init_xavier(model):
-    if hasattr(model, 'weight') and model.weight.dim() > 1:
-        nn.init.xavier_uniform_(model.weight.data)
+    for layer in model.named_parameters():
+        if 'weight' in layer[0] and 'layer_norm' not in layer[0] and 'bert' not in layer[0] and layer[1].dim() > 1:
+            nn.init.xavier_uniform_(layer[1])
 
 
 
@@ -19,18 +19,17 @@ def count_parameters(model):
 
 
 def load_model(model_name, config):
-    if model_name == 'bert_nmt':
-        model = BertNMT(config)
-        model.encoder.apply(init_xavier)
-        model.decoder.apply(init_xavier)
+    model = BertNMT(config)
 
-    elif model_name == 'bert_nmt_light':
-        model = BertNMTLight(config)
-        model.encoder.apply(init_xavier)
-        model.decoder.apply(init_xavier)
+    #Avoiding Update pretrained params
+    for param in model.bert.parameters():
+        param.requires_grad = False
     
+    model.encoder.apply(init_xavier)
+    model.decoder.apply(init_xavier)    
 
     model.to(config.device)
+
     print(f'{model_name} model has loaded. The model has {count_parameters(model):,} trainable parameters')
 
     return model

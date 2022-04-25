@@ -38,18 +38,15 @@ def train_epoch(model, dataloader, criterion, optimizer, clip, device):
     for _, batch in enumerate(dataloader):
         src, trg = batch[0].to(device), batch[1].to(device)
 
-        trg_input = trg[:, :-1]
-        trg_y = trg[:, 1:].contiguous().view(-1)
-
         src_mask = create_src_mask(src)
-        trg_mask = create_trg_mask(trg_input)
+        trg_mask = create_trg_mask(trg)
 
         pred = model(src, trg_input, src_mask, trg_mask)
         
         pred_dim = pred.shape[-1]
         pred = pred.contiguous().view(-1, pred_dim)
 
-        loss = criterion(pred, trg_y)
+        loss = criterion(pred, trg.contiguous().view(-1))
         loss.backward()
 
         nn.utils.clip_grad_norm_(model.parameters(), max_norm=clip)
@@ -73,19 +70,15 @@ def valid_epoch(model, dataloader, criterion, device):
         for _, batch in enumerate(dataloader):
             src, trg = batch[0].to(device), batch[1].to(device)
             
-            trg_input = trg[:, :-1]
-            trg_y = trg[:, 1:].contiguous().view(-1)
-            
             src_mask = create_src_mask(src)
-            trg_mask = create_trg_mask(trg_input)
+            trg_mask = create_trg_mask(trg)
 
             pred = model(src, trg_input, src_mask, trg_mask)
             
-
             pred_dim = pred.shape[-1]
             pred = pred.contiguous().view(-1, pred_dim)
 
-            loss = criterion(pred, trg_y)
+            loss = criterion(pred, trg.contiguous().view(-1))
 
             epoch_loss += loss.item()
 

@@ -4,7 +4,6 @@ cd data
 
 splits=(train valid test)
 langs=(en de)
-models=(bert albert roberta)
 
 
 #download small wmt dataset
@@ -48,23 +47,17 @@ cd ../../
 
 #Build Vocab with Sentencepice
 mkdir -p wmt_sm/vocab
-for model in "${models[@]}"; do
-    bash ../scripts/build_vocab.sh -i wmt_sm/concat.txt -p wmt_sm/vocab/${model} -m ${model}
-done
+bash ../scripts/build_vocab.sh -i wmt_sm/concat.txt -p wmt_sm/vocab/${model} -m ${model}
 rm wmt_sm/concat.txt
 
 
-
 #convert tokens to ids
-for model in "${models[@]}"; do
-    mkdir -p wmt_sm/ids_${model}
-    for split in "${splits[@]}"; do
-        for lang in "${langs[@]}"; do
-            spm_encode --model=wmt_sm/vocab/${model}.model --extra_options=bos:eos \
-            --output_format=id < wmt_sm/tok/${split}.${lang} > wmt_sm/ids_${model}/${split}.${lang}
-        done
+mkdir -p wmt_sm/ids
+for split in "${splits[@]}"; do
+    for lang in "${langs[@]}"; do
+        spm_encode --model=wmt_sm/vocab/spm.model --extra_options=bos:eos \
+        --output_format=id < wmt_sm/tok/${split}.${lang} > wmt_sm/ids_${model}/${split}.${lang}
     done
 done
-
 
 rm -r sentencepiece

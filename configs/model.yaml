@@ -1,95 +1,19 @@
+bert: bert-base-cased
+distil: distilbert-base-cased
+albert: albert-base-v2
+roberta: roberta-base
 
-#bert-base config
-bert: 
-  pretrained: bert-base-cased
-  input_dim: 28996
-  output_dim: 28996
+input_dim: 10000
+output_dim: 10000
 
-  emb_dim: 768
-  hidden_dim: 768
+emb_dim: 768
+hidden_dim: 768
 
-  pff_dim: 1536
+pff_dim: 1536
 
-  n_layers: 3
-  n_heads: 8
-  dropout_ratio: 0.1
+n_layers: 3
+n_heads: 8
+dropout_ratio: 0.1
 
-  pad_idx: 0
-  max_len: 100
-
-
-#bert-large config
-bert_large:
-  pretrained: bert-large-cased
-  input_dim: 28996
-  output_dim: 28996
-
-  emb_dim: 1024
-  hidden_dim: 1024
-
-  pff_dim: 1024
-
-  n_layers: 3
-  n_heads: 8
-  dropout_ratio: 0.1
-
-  pad_idx: 0
-  max_len: 100
-
-
-#distil_bert config
-distil_bert:
-  pretrained: distilbert-base-cased
-  input_dim: 28996
-  output_dim: 28996
-
-  emb_dim: 768
-  hidden_dim: 768
-
-  pff_dim: 1536
-
-  n_layers: 3
-  n_heads: 8
-  dropout_ratio: 0.1
-
-  pad_idx: 0
-  max_len: 100
-
-
-#albert config
-albert:
-  pretrained: albert-base-v2
-  input_dim: 30000
-  output_dim: 30000
-
-  emb_dim: 768
-  hidden_dim: 768
-
-  pff_dim: 1536
-
-  n_layers: 3
-  n_heads: 8
-  dropout_ratio: 0.1
-
-  pad_idx: 0
-  max_len: 100
-
-
-
-#roberta config
-roberta:
-  pretrained: roberta-base
-  input_dim: 50265
-  output_dim: 50265
-
-  emb_dim: 768
-  hidden_dim: 768
-
-  pff_dim: 1536
-
-  n_layers: 3
-  n_heads: 8
-  dropout_ratio: 0.1
-
-  pad_idx: 0
-  max_len: 100
+pad_idx: 0
+max_len: 100
